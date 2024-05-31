@@ -1,9 +1,10 @@
 import Player from './player.js';
 
 class Game {
-  constructor(canvas) {
+  constructor(canvas, playerColor) {
     this.canvas = canvas;
     this.ctx = canvas.getContext('2d');
+    this.playerColor = playerColor; // saves player colour (bloody americans)
     this.player = new Player(50, 50, 20, 20, 5, canvas);
     this.keys = {};
     this.init();
@@ -25,7 +26,7 @@ class Game {
   }
 
   drawPlayer() {
-    this.ctx.fillStyle = 'blue';
+    this.ctx.fillStyle = this.playerColor; // links to barn replace with sprites once made.
     this.ctx.fillRect(this.player.x, this.player.y, this.player.width, this.player.height);
   }
 }
