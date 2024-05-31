@@ -1,76 +1,40 @@
-// App.js
+import React, { useState } from 'react';
+import './../barn.css';
 
-import React, { useEffect, useRef, useState } from 'react';
-import Game from './game/base';
-import Menu from './components/Menu';
-import Settings from './components/Settings';
-import Barn from './components/Barn';
-import './index.css';
+const Barn = ({ onBackClick, onCharacterSelect }) => {
+  const [selectedCharacter, setSelectedCharacter] = useState('blue');
 
-function App() {
-  const canvasRef = useRef(null);
-  const [showMenu, setShowMenu] = useState(true);
-  const [showOptions, setShowOptions] = useState(false);
-  const [showBarn, setShowBarn] = useState(false); // State for showing the Barn component
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-
-    const resizeCanvas = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    };
-
-    const startGame = () => {
-      setShowMenu(false);
-      new Game(canvas);
-    };
-
-    resizeCanvas();
-
-    if (!showMenu && !showBarn && !showOptions) {
-      startGame();
-    }
-
-    window.addEventListener('resize', resizeCanvas);
-    return () => window.removeEventListener('resize', resizeCanvas);
-  }, [showMenu, showBarn, showOptions]);
-
-  const handleStartClick = () => {
-    setShowMenu(false);
-  };
-
-  const handleSettingsClick = () => {
-    setShowOptions(true);
-    setShowMenu(false);
-  };
-
-  const handleBarnClick = () => {
-    setShowBarn(true);
-    setShowMenu(false);
-  };
-
-  const handleBackClick = () => {
-    setShowOptions(false);
-    setShowBarn(false);
-    setShowMenu(true);
+  const handleCharacterClick = (color) => {
+    setSelectedCharacter(color);
+    onCharacterSelect(color);
   };
 
   return (
-    <div className="App">
-      {showMenu && (
-        <Menu
-          onStartClick={handleStartClick}
-          onSettingsClick={handleSettingsClick}
-          onBarnClick={handleBarnClick} // Add Barn button handler
-        />
-      )}
-
-      {showOptions && <Settings onBackClick={handleBackClick} />}
-      {showBarn && <Barn onBackClick={handleBackClick} />}
-      <canvas ref={canvasRef} style={{ border: '1px solid black', display: showMenu ? 'none' : 'block' }} />
+    <div className="barn-container">
+      <h1>Barn</h1>
+      <div className="character-selection">
+        <h2>SELECT YOUR CHARACTER</h2>
+        <div className="character-options">
+          <button
+            className={`character-button ${selectedCharacter === 'red' ? 'selected' : ''}`}
+            style={{ backgroundColor: 'red' }}
+            onClick={() => handleCharacterClick('red')}
+          ></button>
+          <button
+            className={`character-button ${selectedCharacter === 'green' ? 'selected' : ''}`}
+            style={{ backgroundColor: 'green' }}
+            onClick={() => handleCharacterClick('green')}
+          ></button>
+          <button
+            className={`character-button ${selectedCharacter === 'blue' ? 'selected' : ''}`}
+            style={{ backgroundColor: 'blue' }}
+            onClick={() => handleCharacterClick('blue')}
+          ></button>
+        </div>
+      </div>
+      <button className="back-button" onClick={onBackClick}>Back</button>
     </div>
   );
-}
+};
 
-export default App;
+export default Barn;
