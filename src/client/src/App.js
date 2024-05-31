@@ -2,17 +2,17 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import Game from './game/base';
-import Settings from './game/Settings'; // Import the Settings component
-import Barn from './game/Barn'; // Import barn
-import './index.css'; // change if CSS has been relocated
-
+import Menu from './components/Menu';
+import Settings from './components/Settings';
+import Barn from './components/Barn';
+import './index.css';
 
 function App() {
   const canvasRef = useRef(null);
   const [showMenu, setShowMenu] = useState(true);
-  const [showOptions, setShowOptions] = useState(false); 
-  const [showBarn, setShowBarn] = useState(false); // added state for showing barn 
-
+  const [showOptions, setShowOptions] = useState(false);
+  const [showBarn, setShowBarn] = useState(false); // State for showing the Barn component
+  const [selectedColor, setSelectedColor] = useState('blue');  //State for selected chatacter color
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -24,77 +24,58 @@ function App() {
 
     const startGame = () => {
       setShowMenu(false);
-      new Game(canvas);
+      new Game(canvas, selectedColor); // americans again
     };
 
-    resizeCanvas(); // Set initial size
+    resizeCanvas();
 
-    if (!showMenu) {
+    if (!showMenu && !showBarn && !showOptions) {
       startGame();
     }
 
     window.addEventListener('resize', resizeCanvas);
     return () => window.removeEventListener('resize', resizeCanvas);
-  }, [showMenu]);
+  }, [showMenu, showBarn, showOptions, selectedColor]);
 
   const handleStartClick = () => {
     setShowMenu(false);
   };
 
-  // Function to handle displaying options when the "Settings" button is clicked
   const handleSettingsClick = () => {
     setShowOptions(true);
-    setShowMenu(false); // Hide the main menu when options are shown
+    setShowMenu(false);
   };
 
   const handleBarnClick = () => {
     setShowBarn(true);
     setShowMenu(false);
-  }
+  };
 
-  //function to go back a notch
   const handleBackClick = () => {
-    setShowOptions(false); // hide the options page
-    setShowBarn(false); // hide the barn
-    setShowMenu(true); // show the main menu
+    setShowOptions(false);
+    setShowBarn(false);
+    setShowMenu(true);
+  };
+
+  const handleCharacterSelect = (color) => {
+    setSelectedColor(color); // update the selected color
   };
 
   return (
+    <div className="App">
+      {showMenu && (
+        <Menu
+          onStartClick={handleStartClick}
+          onSettingsClick={handleSettingsClick}
+          onBarnClick={handleBarnClick} // Add Barn button handler
+        />
+      )}
 
-    <div className={`App ${!showMenu ? 'background-hidden' : ''}`}>
-      <div className="background-container">
-        <div className="background-image"></div>
-      </div>
-      {showMenu ? (
-        <div className='centre-menu'>
-
-          <h3>Main Menu</h3>
-          <button className='menu-buttons' onClick={handleStartClick}>Start Game</button>
-          <button className='menu-buttons' onClick={handleBarnClick}>Barn</button>
-          <button className='menu-buttons' onClick={handleSettingsClick}>Settings</button> {/* Call handleSettingsClick for "Settings" button */}
-        </div>
-      ) : null}
-
-      {showOptions ? (
-        <div>
-          <Settings onBackClick={handleBackClick} /> 
-        </div>
-      ) : null}
-
-      {showBarn ? (
-        <div>
-          <Barn onBackClick={handleBackClick} />
-        </div>
-      ) : null}
-
-      {!showMenu && (
-
-      <div>
+      {showOptions && <Settings onBackClick={handleBackClick} />}
+      {showBarn && <Barn onBackClick={handleBackClick} onCharacterSelect={handleCharacterSelect} />}
       <canvas ref={canvasRef} style={{ border: '1px solid black', display: showMenu ? 'none' : 'block' }} />
-      <button className='menu-buttons' onClick={handleBackClick} style={{ position: 'absolute', top: 20, left: 20}}>Return to Menu</button>
     </div>
-  )}
-  </div>
   );
 }
+
 export default App;
