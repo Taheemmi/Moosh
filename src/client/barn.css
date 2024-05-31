@@ -1,0 +1,50 @@
+.barn-container {
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .character-selection {
+    margin: 20px auto;
+  }
+  
+  .character-options {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
+  
+  .character-button {
+    width: 50px;
+    height: 50px;
+    border: none;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: transform 0.3s;
+  }
+  
+  .character-button.selected {
+    border: 3px solid black;
+    transform: scale(1.1);
+  }
+  
+  .character-button:hover {
+    transform: scale(1.2);
+  }
+  
+  .back-button {
+    font-size: large;
+    background: rgba(255, 255, 255, 0.36);
+    border-radius: 10px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+    border: 1px solid rgba(255, 255, 255, 1);
+    padding: 10px 20px;
+    margin-top: 20px;
+    cursor: pointer;
+  }
+  
+  .back-button:hover {
+    background: #FFA500;
+  }
+  
